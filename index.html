@@ -398,6 +398,8 @@
             <li><a class="nav-link active" href="#overview">Overview</a></li>
             <li><a class="nav-link" href="#architecture">Architecture</a></li>
             <li><a class="nav-link" href="#target-services">Target services</a></li>
+            <li><a class="nav-link" href="#celipa-agent">Celipa Agent (A2A)</a></li>
+            <li><a class="nav-link" href="#agentic-vision">Agentic Vision</a></li>
             <li><a class="nav-link" href="#screens">Screens → Services</a></li>
             <li><a class="nav-link" href="#flows">End-to-end flows</a></li>
             <li><a class="nav-link" href="#realtime">Real-time & events</a></li>
@@ -411,6 +413,7 @@
             <li><span class="nav-link">MICROSERVICES_ARCHITECTURE.md</span></li>
             <li><span class="nav-link">MICROSERVICES_SUMMARY.md</span></li>
             <li><span class="nav-link">CELIPA_APP_ARCHITECTURE.md</span></li>
+            <li><span class="nav-link">ORCHESTRATOR_A2A_ARCHITECTURE.md</span></li>
           </ul>
         </div>
 
@@ -426,20 +429,24 @@
             <span class="dot"></span>
             CELIPA MODERNIZATION
           </div>
-          <h2 class="hero-title">From Monolith to Microservices</h2>
+          <h2 class="hero-title">From Monolith to Agentic Microservices</h2>
           <p class="hero-subtitle">
             This index captures the full Celipa mobile surface area (screens), the
             HTTP requests each screen makes today, and how those calls map onto our
-            target services architecture (Auth, User, Receipt, Items, Participants,
-            OCR, Notification, Real-time, Analytics, File Storage).
+            target services architecture. <strong>Celipa v2.0</strong> introduces an
+            <strong>Agentic AI Orchestrator</strong> (A2A protocol) that handles intelligent
+            bill splitting, Vision-LLM receipt extraction, and autonomous workflows.
+            All services are built in <strong>Go with gRPC and Protocol Buffers</strong>,
+            deployed on <strong>Google Cloud Run</strong> as microservices.
           </p>
           <div class="hero-tags">
             <span class="tag">React Native App</span>
-            <span class="tag">Node / Express Backend</span>
-            <span class="tag">Socket.io Collaboration</span>
-            <span class="tag">AWS Textract &amp; Veryfi OCR</span>
-            <span class="tag">Twilio &amp; SendGrid</span>
-            <span class="tag">Microservices migration plan</span>
+            <span class="tag">Go / gRPC / Proto v2.0</span>
+            <span class="tag">Cloud Run Microservices</span>
+            <span class="tag">A2A Agent Protocol</span>
+            <span class="tag">Vision-LLM OCR</span>
+            <span class="tag">Agentic AI Orchestrator</span>
+            <span class="tag">Real-time Payment Rails</span>
           </div>
         </section>
 
@@ -476,32 +483,45 @@ POST (Veryfi) /partner/documents/</code></pre>
 
             <article class="card">
               <div class="card-header">
-                <div class="card-title">Target architecture</div>
-                <span class="card-pill">Target services</span>
+                <div class="card-title">Target architecture (Celipa v2.0)</div>
+                <span class="card-pill">Go / gRPC / Proto</span>
               </div>
               <p>
-                Celipa is refactored into domain-aligned target services (Auth, User,
-                Receipt, Items, Participants, OCR, Notification, Real-time, Analytics,
-                File Storage) behind an API Gateway. Each service owns its data and
-                surface.
+                Celipa v2.0 is refactored into domain-aligned microservices built in
+                <strong>Go with gRPC and Protocol Buffers</strong>, deployed on
+                <strong>Google Cloud Run</strong>. Services include Auth, User, Receipt,
+                Items, Participants, Notification, Real-time, Analytics, File Storage, and
+                the new <strong>Celipa Agent (Orchestrator)</strong> using A2A protocol
+                for intelligent bill splitting and Vision-LLM receipt extraction.
               </p>
-              <pre><code>// Example (target) service endpoints
-POST /auth/login                     → Auth Service
-PATCH /users/:userId                 → User Service
-POST /receipts                       → Receipt Service
-GET  /receipts/:id                   → Receipt Service
-GET  /receipts/:id/items             → Receipt Items Service
-POST /receipts/:id/items/:itemId/assign
-                                     → Receipt Items Service
-POST /receipts/:id/participants      → Participants Service
-PUT  /receipts/:id/participants/:userId/confirm
-                                     → Participants Service
-POST /ocr/scan                       → OCR Service
-POST /notifications/email            → Notification Service
-WS   wss://realtime.celipa.co       → Real-time Service</code></pre>
+              <pre><code>// Example (target) gRPC service calls
+rpc Login(LoginRequest) returns (LoginResponse)
+     → Auth Service (dl/iam/v1)
+
+rpc CreateReceipt(CreateReceiptRequest) returns (Receipt)
+     → Receipt Service
+
+rpc ProcessReceiptImage(ProcessImageRequest) returns (ReceiptData)
+     → Celipa Agent (A2A orchestrator)
+     └─ Vision-LLM extraction + intelligent splitting
+
+rpc AssignItem(AssignItemRequest) returns (Item)
+     → Receipt Items Service
+
+rpc ConfirmPayment(ConfirmPaymentRequest) returns (PaymentStatus)
+     → Participants Service
+
+rpc SendNotification(SendRequest) returns (SendResponse)
+     → Notification Service (dl/messaging/v1 + Twilio)
+
+// A2A Protocol (Agent-to-Agent)
+rpc SendMessage(SendMessageRequest) returns (SendMessageResponse)
+     → Celipa Agent (orchestrator)</code></pre>
               <p class="footnote">
-                The mobile app keeps the same flows; only the backing URLs and
-                service boundaries change.
+                All services use gRPC with Protocol Buffers for type-safe, efficient
+                communication. The Celipa Agent orchestrates complex workflows using
+                A2A protocol, enabling agent-to-agent communication and autonomous
+                task execution.
               </p>
             </article>
           </div>
@@ -563,43 +583,45 @@ WS   wss://realtime.celipa.co       → Real-time Service</code></pre>
 
           <article class="card">
             <div class="card-header">
-              <div class="card-title">New Celipa-specific services</div>
-              <span class="badge">To be built</span>
+              <div class="card-title">New Celipa-specific services (v2.0)</div>
+              <span class="badge">Go / gRPC / Proto</span>
             </div>
             <p>
               The remainder of Celipa's backend remains Celipa-specific and will be
-              implemented as new target services, even when conceptually similar to
-              existing platform services:
+              implemented as new target services in <strong>Go with gRPC and Protocol Buffers</strong>,
+              deployed on <strong>Google Cloud Run</strong>:
             </p>
             <ul>
               <li>
+                <strong>Celipa Agent (Orchestrator)</strong> –
+                A2A protocol-based agent that orchestrates intelligent bill splitting,
+                Vision-LLM receipt extraction (replaces traditional OCR), proportional
+                tax/tip distribution, shared item management, and autonomous workflows.
+                This is the "brain" of Celipa v2.0.
+              </li>
+              <li>
                 <strong>Receipt Service</strong> –
-                create/read/update receipts, generate receipt codes, expose
-                <code>/receipts</code> and <code>/receipts/:id</code>.
+                create/read/update receipts, generate receipt codes, gRPC endpoints
+                <code>rpc CreateReceipt</code>, <code>rpc GetReceipt</code>.
               </li>
               <li>
                 <strong>Receipt Items Service</strong> –
                 menu items and assignment APIs, e.g.
-                <code>/receipts/:id/items</code>,
-                <code>/receipts/:id/items/:itemId/assign</code>.
+                <code>rpc AssignItem</code>, <code>rpc ListItems</code>.
               </li>
               <li>
                 <strong>Receipt Participants Service</strong> –
                 participants, join codes, payment status, e.g.
-                <code>/receipts/:id/participants</code>.
-              </li>
-              <li>
-                <strong>OCR Service</strong> –
-                wraps Veryfi/AWS Textract for Celipa’s receipt scanning needs.
+                <code>rpc AddParticipant</code>, <code>rpc ConfirmPayment</code>.
               </li>
               <li>
                 <strong>Notification Service</strong> –
-                composes the reusable email service with Twilio SMS and (optionally)
-                push notifications for Celipa-specific templates.
+                composes the reusable email service with Twilio SMS and push
+                notifications for Celipa-specific templates.
               </li>
               <li>
                 <strong>Real-time Service</strong> –
-                Socket.io/WebSocket hub for receipt rooms and payment updates.
+                WebSocket/gRPC streaming hub for receipt rooms and payment updates.
               </li>
               <li>
                 <strong>Analytics Service</strong> –
@@ -608,15 +630,407 @@ WS   wss://realtime.celipa.co       → Real-time Service</code></pre>
               </li>
               <li>
                 <strong>File Storage Service</strong> –
-                S3-backed storage for receipt images and profile pictures.
+                GCS-backed storage for receipt images and profile pictures.
               </li>
             </ul>
             <p class="footnote">
+              <strong>Note:</strong> Traditional OCR service is replaced by the Celipa Agent's
+              Vision-LLM extraction capability. The agent uses multimodal AI to handle
+              crumpled, faded, and handwritten receipts with zero-shot semantic understanding.
               Optionally, the existing <code>dl/gateway/v1</code> service can be reused
-              as an API gateway, but this is not required: Celipa can also be fronted
-              by a dedicated gateway that simply routes to the IAM, messaging and the
-              new Celipa-specific target services.
+              as an API gateway.
             </p>
+          </article>
+        </section>
+
+        <section id="celipa-agent">
+          <h2>Celipa Agent (A2A Orchestrator)</h2>
+          <p>
+            The <strong>Celipa Agent</strong> is an A2A (Agent-to-Agent) protocol-based
+            orchestrator that serves as the intelligent core of Celipa v2.0. Built in Go
+            with gRPC and Protocol Buffers, it handles complex bill splitting workflows,
+            Vision-LLM receipt extraction, and autonomous task execution.
+          </p>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Agent Architecture</div>
+              <span class="badge">A2A Protocol</span>
+            </div>
+            <p>
+              The Celipa Agent implements the A2A protocol (similar to orchestrator agent),
+              enabling standardized agent-to-agent communication, task management, and
+              autonomous workflows. It publishes an <strong>AgentCard</strong> describing
+              its capabilities and supports both gRPC and JSON-RPC transports.
+            </p>
+            <pre><code>// AgentCard definition
+agentCard := a2a.AgentCard{
+    Name: "celipa-orchestrator",
+    Capabilities: a2a.AgentCapabilities{
+        PushNotifications: true,
+        Streaming:         true,
+    },
+    PreferredTransport: a2a.TransportProtocolGRPC,
+    Skills: []a2a.AgentSkill{
+        {
+            ID:          "IntelligentBillSplitting",
+            Name:        "Intelligent Bill Splitting",
+            Description: "Orchestrates proportional tax/tip distribution, shared items, and autonomous reconciliation",
+        },
+        {
+            ID:          "VisionLLMExtraction",
+            Name:        "Vision-LLM Receipt Extraction",
+            Description: "Multimodal AI parser for receipts (crumpled, faded, handwritten)",
+        },
+        {
+            ID:          "AutonomousWorkflows",
+            Name:        "Autonomous Workflows",
+            Description: "Passive ingestion, intelligent recommendations, voice-enabled splitting",
+        },
+    },
+}</code></pre>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Core Capabilities</div>
+              <span class="badge">Intelligent Orchestration</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>1. Vision-LLM Receipt Extraction</h4>
+                <p>
+                  Replaces traditional OCR (Veryfi/AWS Textract) with a multimodal AI
+                  parser that handles:
+                </p>
+                <ul>
+                  <li>Crumpled, faded, and handwritten receipts</li>
+                  <li>Zero-shot semantic understanding</li>
+                  <li>Automatic item, price, tax, tip extraction</li>
+                  <li>Vendor name and location detection</li>
+                </ul>
+                <pre><code>rpc ProcessReceiptImage(ProcessImageRequest) returns (ReceiptData)
+// Uses Gemini Vision API or similar multimodal LLM
+// Returns structured receipt data with confidence scores</code></pre>
+              </div>
+              <div>
+                <h4>2. Intelligent Bill Splitting</h4>
+                <p>
+                  Orchestrates complex splitting logic:
+                </p>
+                <ul>
+                  <li><strong>Proportional Tax/Tip:</strong> Distributes tax, tip, service fees based on individual item consumption</li>
+                  <li><strong>Shared Items:</strong> Seamless UI for splitting shared appetizers, drinks, etc.</li>
+                  <li><strong>Fractional Portions:</strong> Automatic cost distribution (e.g., 3 people → 1/3 each)</li>
+                  <li><strong>Mathematical Precision:</strong> "Everyone pays only for what they ordered"</li>
+                </ul>
+                <pre><code>rpc SplitBill(SplitBillRequest) returns (SplitBillResponse)
+// Calculates proportional distributions
+// Handles shared items, tax, tip, discounts</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Agent Tools</div>
+              <span class="badge">Tool-Based Architecture</span>
+            </div>
+            <p>
+              The Celipa Agent exposes capabilities as "tools" that can be called by
+              the LLM or other services. Tools include:
+            </p>
+            <ul>
+              <li>
+                <strong><code>extract_receipt_data</code></strong> –
+                Vision-LLM extraction from receipt image
+              </li>
+              <li>
+                <strong><code>calculate_proportional_split</code></strong> –
+                Distributes tax, tip, fees proportionally
+              </li>
+              <li>
+                <strong><code>manage_shared_items</code></strong> –
+                Handles shared item splitting logic
+              </li>
+              <li>
+                <strong><code>suggest_saved_groups</code></strong> –
+                Recommends "Saved Groups" based on location/time
+              </li>
+              <li>
+                <strong><code>reconcile_payments</code></strong> –
+                Autonomous payment reconciliation
+              </li>
+              <li>
+                <strong><code>initiate_payment</code></strong> –
+                Triggers real-time payment rails (Pix, UPI, FedNow)
+              </li>
+            </ul>
+            <p class="footnote">
+              Tools are defined in Protocol Buffers and can be called by the agent's
+              LLM (Gemini) or directly by other services via gRPC.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Service Integration</div>
+              <span class="badge">Orchestration</span>
+            </div>
+            <p>
+              The Celipa Agent orchestrates calls to other microservices:
+            </p>
+            <pre><code>// Agent orchestrates the full receipt flow:
+1. Receives receipt image from mobile app
+2. Calls Vision-LLM extraction tool
+3. Creates receipt via Receipt Service gRPC
+4. Creates items via Receipt Items Service gRPC
+5. Calculates proportional splits (agent logic)
+6. Invites participants via Participants Service gRPC
+7. Sends notifications via Notification Service gRPC
+8. Publishes real-time updates via Real-time Service
+
+// All orchestrated by the agent, not the mobile app</code></pre>
+            <p class="footnote">
+              The mobile app sends a single request to the agent; the agent handles
+              the entire workflow autonomously, reducing app complexity and enabling
+              intelligent decision-making.
+            </p>
+          </article>
+        </section>
+
+        <section id="agentic-vision">
+          <h2>Agentic Vision: The Future of Celipa</h2>
+          <p>
+            Celipa v2.0 embraces <strong>Agentic AI</strong>—the transition from passive
+            tools to active, autonomous assistants that execute complex workflows without
+            direct human intervention. This section outlines the visionary capabilities
+            that transform Celipa from a bill-splitting app into an intelligent financial
+            assistant.
+          </p>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Pillar 1: Vision-LLM Extraction</div>
+              <span class="badge">Multimodal AI</span>
+            </div>
+            <p>
+              <strong>Abandon traditional OCR</strong> in favor of a multimodal AI parser
+              capable of handling crumpled, faded, and handwritten receipts with
+              "zero-shot" semantic understanding.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Current (v1.0)</h4>
+                <ul>
+                  <li>Veryfi SDK / AWS Textract</li>
+                  <li>Requires clear, high-quality images</li>
+                  <li>Structured OCR output</li>
+                  <li>Manual correction needed for edge cases</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Future (v2.0)</h4>
+                <ul>
+                  <li>Gemini Vision API / Claude Vision</li>
+                  <li>Handles crumpled, faded, handwritten</li>
+                  <li>Semantic understanding (not just text extraction)</li>
+                  <li>Automatic correction and validation</li>
+                  <li>Context-aware extraction (knows restaurant menus, pricing patterns)</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Pillar 2: Automated Precision</div>
+              <span class="badge">Mathematical Promise</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>Proportional Tax/Tip Logic</h4>
+                <p>
+                  Automate the distribution of all "extra" costs (tax, tip, service fees,
+                  discounts) based on individual item consumption. <strong>"Everyone pays
+                  only for what they ordered"</strong> must be the core mathematical promise.
+                </p>
+                <pre><code>// Example: 3 people, $100 bill, $10 tax, $15 tip
+Person A: $40 items → $4 tax, $6 tip → $50 total
+Person B: $35 items → $3.50 tax, $5.25 tip → $43.75 total
+Person C: $25 items → $2.50 tax, $3.75 tip → $31.25 total
+Total: $125 (exactly matches bill + tax + tip)</code></pre>
+              </div>
+              <div>
+                <h4>Shared Item Management</h4>
+                <p>
+                  Provide a seamless UI for "splitting the shared appetizer." Tapping an
+                  item among three people should automatically distribute the cost into
+                  three fractional portions in the state.
+                </p>
+                <pre><code>// Example: $12 appetizer shared by 3 people
+Each person pays: $4.00
+Agent automatically calculates:
+- Base: $4.00
+- Proportional tax: $0.40 (1/3 of $1.20 tax)
+- Proportional tip: $0.60 (1/3 of $1.80 tip)
+Total per person: $5.00</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Pillar 3: The Agentic AI Frontier</div>
+              <span class="badge">Touchless Transactions</span>
+            </div>
+            <p>
+              The "Holy Grail" of bill splitting in 2026 is <strong>Agentic AI</strong>—the
+              transition from passive tools to active, autonomous assistants that execute
+              complex workflows without direct human intervention.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>1. Autonomous Bill Reconciliation</h4>
+                <p>
+                  AI agents autonomously collect receipts, reconcile transactions, and
+                  validate payments—similar to BILL's "touchless" processing for small
+                  businesses.
+                </p>
+                <ul>
+                  <li>Monitors Gmail/Apple Wallet for restaurant receipts</li>
+                  <li>Automatically drafts splits based on past behavior</li>
+                  <li>Validates transactions and reconciles payments</li>
+                  <li>Requires minimal user intervention</li>
+                </ul>
+              </div>
+              <div>
+                <h4>2. Intelligent Recommendations</h4>
+                <p>
+                  Suggesting "Saved Groups" (e.g., "The Friday Lunch Crew") based on
+                  location and time of the transaction.
+                </p>
+                <ul>
+                  <li>Learns user patterns (who they split with, when, where)</li>
+                  <li>Auto-suggests participants when creating receipts</li>
+                  <li>Remembers payment preferences (Venmo, CashApp, etc.)</li>
+                  <li>Context-aware suggestions (e.g., "Same group as last Friday?")</li>
+                </ul>
+              </div>
+              <div>
+                <h4>3. Voice-Enabled Splitting</h4>
+                <p>
+                  Using natural language processing to allow a user to simply say,
+                  <strong>"Celipa, split the wine between Sarah and me"</strong>, rather
+                  than manually dragging icons.
+                </p>
+                <ul>
+                  <li>Voice commands: "Split appetizer 3 ways"</li>
+                  <li>Natural language: "Everyone pays for their own, except the wine"</li>
+                  <li>Conversational interface: "Who had the pasta?"</li>
+                  <li>Multi-modal: Voice + gesture + text</li>
+                </ul>
+              </div>
+              <div>
+                <h4>4. Passive Ingestion</h4>
+                <p>
+                  An AI agent that monitors the user's Gmail or Apple Wallet for restaurant
+                  receipts and automatically drafts a split.
+                </p>
+                <ul>
+                  <li>Gmail integration: Scans for receipt emails</li>
+                  <li>Apple Wallet: Detects restaurant transactions</li>
+                  <li>Auto-creates receipts with suggested splits</li>
+                  <li>User just confirms or adjusts</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Pillar 4: Unified Payment Rails</div>
+              <span class="badge">Real-Time Settlement</span>
+            </div>
+            <p>
+              The future of settlement lies in the global adoption of real-time,
+              account-to-account payment systems. In Brazil (Pix) and India (UPI), these
+              systems have already replaced cards for the majority of routine payments.
+              By 2026, the US is seeing a similar shift with FedNow and RTP.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Global Payment Rails</h4>
+                <ul>
+                  <li><strong>Pix (Brazil):</strong> Real-time, 24/7, instant transfers</li>
+                  <li><strong>UPI (India):</strong> Unified Payments Interface, QR-based</li>
+                  <li><strong>FedNow (US):</strong> Federal Reserve's real-time payment system</li>
+                  <li><strong>RTP (US):</strong> Real-Time Payments network</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Celipa Integration</h4>
+                <p>
+                  Apps that integrate directly with these real-time rails allow for
+                  instant, cost-free transfers that happen in the background. This
+                  transforms the app from a simple ledger into a <strong>"personal
+                  financial assistant"</strong> that manages spending, savings, and
+                  credit intelligently.
+                </p>
+                <ul>
+                  <li>Shift from "tracking a debt" to "initiating a settlement"</li>
+                  <li>Instant, cost-free transfers</li>
+                  <li>Background automation</li>
+                  <li>Financial intelligence layer</li>
+                </ul>
+              </div>
+            </div>
+            <pre><code>// Agent orchestrates payment flow:
+1. User confirms split
+2. Agent calculates final amounts
+3. Agent initiates real-time payment via Pix/UPI/FedNow
+4. Payment completes in seconds (not days)
+5. Agent updates receipt status
+6. All participants notified automatically
+
+// No manual Venmo/CashApp steps needed</code></pre>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Implementation Roadmap</div>
+              <span class="badge">Phased Approach</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>Phase 1: Foundation (v2.0)</h4>
+                <ul>
+                  <li>Go/gRPC/Proto microservices on Cloud Run</li>
+                  <li>Celipa Agent with A2A protocol</li>
+                  <li>Vision-LLM extraction (replaces OCR)</li>
+                  <li>Proportional tax/tip distribution</li>
+                  <li>Shared item management</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Phase 2: Intelligence (v2.1)</h4>
+                <ul>
+                  <li>Intelligent recommendations (Saved Groups)</li>
+                  <li>Voice-enabled splitting</li>
+                  <li>Autonomous bill reconciliation</li>
+                  <li>Payment preference learning</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Phase 3: Automation (v2.2)</h4>
+                <ul>
+                  <li>Passive ingestion (Gmail/Apple Wallet)</li>
+                  <li>Real-time payment rails (Pix/UPI/FedNow)</li>
+                  <li>Background automation</li>
+                  <li>Financial intelligence layer</li>
+                </ul>
+              </div>
+            </div>
           </article>
         </section>
 
@@ -1084,22 +1498,28 @@ WS   wss://realtime.celipa.co       → Real-time Service</code></pre>
   └─ tap "Scan receipt"
        ▼
 ReceiptPictureScreen
-  ├─ GET  /global/credentials             → OCR creds
-  ├─ POST Veryfi /partner/documents/      → OCR extraction
-  └─ navigate(UserReceiptScreen, data)
+  └─ POST image to Celipa Agent (gRPC)
+       ▼
+Celipa Agent (A2A Orchestrator)
+  ├─ Vision-LLM extraction (multimodal AI)
+  ├─ Creates receipt (Receipt Service gRPC)
+  ├─ Creates items (Items Service gRPC)
+  ├─ Calculates proportional splits (agent logic)
+  ├─ Invites participants (Participants Service gRPC)
+  └─ Returns structured data
        ▼
 UserReceiptScreen
-  └─ POST /receipt/create                 → create receipt + items + participants
+  └─ Displays extracted data (editable)
        ▼
 VirtualReceiptScreen
-  ├─ GET  /user/menuitems/:receiptId
-  ├─ GET  /current/user/:receiptId
-  ├─ WS   Socket.io on &lt;receiptId&gt;
-  └─ collaborative splitting begins</code></pre>
+  ├─ WS   Real-time Service (gRPC streaming)
+  ├─ Agent orchestrates collaborative splitting
+  └─ Proportional tax/tip calculated automatically</code></pre>
               <p class="footnote">
-                In the microservices world, these map to OCR, Receipt, Items,
-                Participants, and Real-time services, but the app flow stays
-                identical.
+                In Celipa v2.0, the <strong>Celipa Agent</strong> orchestrates the entire
+                flow. The mobile app sends a single request with the receipt image; the
+                agent handles Vision-LLM extraction, service calls, and intelligent splitting
+                autonomously. The app flow is simpler, but the backend is more intelligent.
               </p>
             </article>
 
@@ -1109,25 +1529,31 @@ VirtualReceiptScreen
                 <span class="card-pill">Join → Select → Pay</span>
               </div>
               <pre><code>HomeScreen
-  └─ tap "Join receipt"
+  └─ tap "Join receipt" (or scan QR code)
        ▼
 JoinReceiptScreen
-  ├─ GET /receipt/join/:userId/:code
+  ├─ gRPC: GetReceiptByCode (Receipt Service)
   └─ navigate(VirtualReceiptScreen, { receiptId })
        ▼
 VirtualReceiptScreen
-  ├─ assign items (PUT /menu/addparticipant/...)
+  ├─ Agent suggests items based on user history
+  ├─ Voice: "Split appetizer 3 ways" → Agent executes
+  ├─ gRPC: AssignItem (Items Service)
+  ├─ Agent calculates proportional tax/tip automatically
   └─ tap "Confirm selection"
        ▼
 AcceptPaymentModal
-  └─ PUT /receipt/confirmStatus/:userId/:receiptId
+  ├─ Agent shows final amount (with proportional splits)
+  ├─ gRPC: ConfirmPayment (Participants Service)
+  └─ Agent initiates real-time payment (Pix/UPI/FedNow)
        ▼
 ConfirmationScreen
-  └─ done</code></pre>
+  └─ Payment completed in seconds (not days)</code></pre>
               <p class="footnote">
-                With microservices, the same flow uses Receipt, Participants,
-                Calculation, Notification, and Real-time services instead of a
-                single Express app.
+                With Celipa v2.0, the <strong>Celipa Agent</strong> orchestrates the flow,
+                provides intelligent suggestions, handles voice commands, calculates
+                proportional splits automatically, and initiates real-time payments.
+                The user experience is seamless; the agent does the heavy lifting.
               </p>
             </article>
           </div>
