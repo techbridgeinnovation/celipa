@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Celipa Modernization Index</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --bg-alt: #111729;
+        --card: #161b2e;
+        --accent: #27c3ff;
+        --accent-soft: rgba(39, 195, 255, 0.1);
+        --accent-2: #98c548;
+        --text: #f7fafc;
+        --muted: #a0aec0;
+        --border: #2d3748;
+        --danger: #f56565;
+        --mono: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        background: radial-gradient(circle at top left, #1a365d, #0b1020 50%, #000 100%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .page {
+        display: grid;
+        grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      @media (max-width: 960px) {
+        .page {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .sidebar {
+          position: static;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+        height: 100vh;
+        padding: 24px 20px;
+        background: linear-gradient(180deg, #080c1a 0%, #050712 100%);
+        border-right: 1px solid var(--border);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 999px;
+        background: conic-gradient(from 180deg, #27c3ff, #98c548, #f6c564, #ec6964, #27c3ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+      }
+
+      .logo-mark span {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0b1020;
+      }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo-text h1 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .logo-text span {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--muted);
+        letter-spacing: 0.12em;
+      }
+
+      .nav-section-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--muted);
+        letter-spacing: 0.16em;
+        margin: 22px 0 8px;
+      }
+
+      .nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .nav-list li {
+        margin-bottom: 4px;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 6px 8px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+      }
+
+      .nav-link.active {
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: 1px solid rgba(39, 195, 255, 0.3);
+      }
+
+      .nav-caption {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 20px;
+        line-height: 1.4;
+      }
+
+      .main {
+        padding: 28px 32px 40px;
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 960px) {
+        .main {
+          padding: 20px 16px 32px;
+        }
+      }
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        font-size: 22px;
+      }
+
+      h3 {
+        margin-top: 26px;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+
+      p {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-top: 0;
+      }
+
+      .hero {
+        margin-bottom: 26px;
+      }
+
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(156, 163, 175, 0.5);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .hero-eyebrow span.dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #48bb78;
+        box-shadow: 0 0 0 4px rgba(72, 187, 120, 0.25);
+      }
+
+      .hero-title {
+        font-size: 28px;
+        margin: 0 0 8px;
+      }
+
+      .hero-subtitle {
+        max-width: 720px;
+      }
+
+      .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .tag {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        color: var(--muted);
+      }
+
+      .layout-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+        gap: 18px;
+        margin-top: 8px;
+      }
+
+      @media (max-width: 1120px) {
+        .layout-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(15, 23, 42, 0.9));
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        padding: 14px 16px 16px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 8px;
+      }
+
+      .card-title {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted);
+      }
+
+      .card-pill {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(39, 195, 255, 0.09);
+        color: var(--accent);
+      }
+
+      .mono {
+        font-family: var(--mono);
+        font-size: 12px;
+      }
+
+      code {
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 1px 4px;
+        border-radius: 4px;
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(45, 55, 72, 0.9);
+      }
+
+      pre {
+        font-family: var(--mono);
+        font-size: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(15, 23, 42, 0.96);
+        border: 1px solid rgba(45, 55, 72, 0.9);
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      th,
+      td {
+        padding: 6px 6px;
+        border-bottom: 1px solid rgba(45, 55, 72, 0.9);
+        vertical-align: top;
+      }
+
+      th {
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      .col-narrow {
+        width: 18%;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 1px 6px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.45);
+        font-size: 11px;
+        margin: 1px 2px 1px 0;
+      }
+
+      .chip.service {
+        border-color: rgba(39, 195, 255, 0.6);
+        color: var(--accent);
+      }
+
+      .chip.event {
+        border-color: rgba(154, 230, 180, 0.6);
+        color: #9ae6b4;
+      }
+
+      .chip.error {
+        border-color: rgba(245, 101, 101, 0.7);
+        color: var(--danger);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: rgba(72, 187, 120, 0.14);
+        color: #9ae6b4;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+
+      .footnote {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="logo">
+          <div class="logo-mark">
+            <span>C</span>
+          </div>
+          <div class="logo-text">
+            <h1>Celipa</h1>
+            <span>Modernization Index</span>
+          </div>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Sections</div>
+          <ul class="nav-list">
+            <li><a class="nav-link active" href="#overview">Overview</a></li>
+            <li><a class="nav-link" href="#architecture">Architecture</a></li>
+            <li><a class="nav-link" href="#target-services">Target services</a></li>
+            <li><a class="nav-link" href="#screens">Screens → Services</a></li>
+            <li><a class="nav-link" href="#flows">End-to-end flows</a></li>
+            <li><a class="nav-link" href="#realtime">Real-time & events</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Reference docs</div>
+          <ul class="nav-list">
+            <li><span class="nav-link">CELIPA_SERVER_ANALYSIS.md</span></li>
+            <li><span class="nav-link">MICROSERVICES_ARCHITECTURE.md</span></li>
+            <li><span class="nav-link">MICROSERVICES_SUMMARY.md</span></li>
+            <li><span class="nav-link">CELIPA_APP_ARCHITECTURE.md</span></li>
+          </ul>
+        </div>
+
+        <p class="nav-caption">
+          This index maps every Celipa screen and request to the target services
+          architecture, to guide the migration from the current monolith.
+        </p>
+      </aside>
+
+      <main class="main">
+        <section id="overview" class="hero">
+          <div class="hero-eyebrow">
+            <span class="dot"></span>
+            CELIPA MODERNIZATION
+          </div>
+          <h2 class="hero-title">From Monolith to Microservices</h2>
+          <p class="hero-subtitle">
+            This index captures the full Celipa mobile surface area (screens), the
+            HTTP requests each screen makes today, and how those calls map onto our
+            target services architecture (Auth, User, Receipt, Items, Participants,
+            OCR, Notification, Real-time, Analytics, File Storage).
+          </p>
+          <div class="hero-tags">
+            <span class="tag">React Native App</span>
+            <span class="tag">Node / Express Backend</span>
+            <span class="tag">Socket.io Collaboration</span>
+            <span class="tag">AWS Textract &amp; Veryfi OCR</span>
+            <span class="tag">Twilio &amp; SendGrid</span>
+            <span class="tag">Microservices migration plan</span>
+          </div>
+        </section>
+
+        <section id="architecture">
+          <div class="layout-grid">
+            <article class="card">
+              <div class="card-header">
+                <div class="card-title">Current architecture</div>
+                <span class="card-pill">Monolith</span>
+              </div>
+              <p>
+                Celipa today uses a single Node/Express server
+                (<code>celipa-server</code>) with MongoDB, where all concerns (auth,
+                users, receipts, items, participants, OCR orchestration, payments,
+                notifications, dashboard) live behind the same base URL
+                <code>https://server.celipa.co</code>.
+              </p>
+              <pre><code>// Example (current) mobile HTTP calls
+POST /user/login
+POST /user/signup
+PATCH /user/profile
+POST /receipt/create
+GET  /user/receipt/:userId
+GET  /user/menuitems/:receiptId
+PUT  /menu/addparticipant/:userId/:menuId/:receiptId/:quantity
+PUT  /receipt/confirmStatus/:userId/:receiptId
+GET  /global/credentials        // Veryfi OCR
+POST (Veryfi) /partner/documents/</code></pre>
+              <p class="footnote">
+                All of these share a single DB and Socket.io instance; scaling one
+                concern forces scaling the whole server.
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <div class="card-title">Target architecture</div>
+                <span class="card-pill">Target services</span>
+              </div>
+              <p>
+                Celipa is refactored into domain-aligned target services (Auth, User,
+                Receipt, Items, Participants, OCR, Notification, Real-time, Analytics,
+                File Storage) behind an API Gateway. Each service owns its data and
+                surface.
+              </p>
+              <pre><code>// Example (target) service endpoints
+POST /auth/login                     → Auth Service
+PATCH /users/:userId                 → User Service
+POST /receipts                       → Receipt Service
+GET  /receipts/:id                   → Receipt Service
+GET  /receipts/:id/items             → Receipt Items Service
+POST /receipts/:id/items/:itemId/assign
+                                     → Receipt Items Service
+POST /receipts/:id/participants      → Participants Service
+PUT  /receipts/:id/participants/:userId/confirm
+                                     → Participants Service
+POST /ocr/scan                       → OCR Service
+POST /notifications/email            → Notification Service
+WS   wss://realtime.celipa.co       → Real-time Service</code></pre>
+              <p class="footnote">
+                The mobile app keeps the same flows; only the backing URLs and
+                service boundaries change.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="target-services">
+          <h2>Target services (what we can reuse)</h2>
+          <p>
+            Celipa's target architecture reuses a few existing services from the broader
+            platform and introduces several Celipa-specific services. This section
+            summarizes the main reusable services and what new services we still need
+            to build.
+          </p>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Reusable target services</div>
+              <span class="badge">Existing services</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Target service</th>
+                  <th>Source</th>
+                  <th>Celipa usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>IAM Service</strong></td>
+                  <td>
+                    <code>dl/iam/v1</code><br />
+                    (auth_code, user, groups, organizations, refresh tokens)
+                  </td>
+                  <td>
+                    Use as the foundation for Celipa authentication and authorization:
+                    user identities, sessions, group/organization membership and tokens.
+                    Celipa's Auth and User services become thin adapters over the IAM
+                    APIs instead of re‑implementing identity.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Email Service</strong></td>
+                  <td>
+                    <code>dl/messaging/v1</code>, <code>dl/sg/mail/v1</code>,
+                    <code>dl/sendgrid/v1</code><br />
+                    (generic SendGrid integration)
+                  </td>
+                  <td>
+                    Reuse as the email channel for Celipa's Notification Service:
+                    signup/verification emails, receipt summaries, incident emails and
+                    marketing. We will extend this with Twilio SMS to cover the text
+                    flows Celipa already uses today.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">New Celipa-specific services</div>
+              <span class="badge">To be built</span>
+            </div>
+            <p>
+              The remainder of Celipa's backend remains Celipa-specific and will be
+              implemented as new target services, even when conceptually similar to
+              existing platform services:
+            </p>
+            <ul>
+              <li>
+                <strong>Receipt Service</strong> –
+                create/read/update receipts, generate receipt codes, expose
+                <code>/receipts</code> and <code>/receipts/:id</code>.
+              </li>
+              <li>
+                <strong>Receipt Items Service</strong> –
+                menu items and assignment APIs, e.g.
+                <code>/receipts/:id/items</code>,
+                <code>/receipts/:id/items/:itemId/assign</code>.
+              </li>
+              <li>
+                <strong>Receipt Participants Service</strong> –
+                participants, join codes, payment status, e.g.
+                <code>/receipts/:id/participants</code>.
+              </li>
+              <li>
+                <strong>OCR Service</strong> –
+                wraps Veryfi/AWS Textract for Celipa’s receipt scanning needs.
+              </li>
+              <li>
+                <strong>Notification Service</strong> –
+                composes the reusable email service with Twilio SMS and (optionally)
+                push notifications for Celipa-specific templates.
+              </li>
+              <li>
+                <strong>Real-time Service</strong> –
+                Socket.io/WebSocket hub for receipt rooms and payment updates.
+              </li>
+              <li>
+                <strong>Analytics Service</strong> –
+                aggregates user and receipt statistics for the mobile home dashboard
+                and any future admin dashboards.
+              </li>
+              <li>
+                <strong>File Storage Service</strong> –
+                S3-backed storage for receipt images and profile pictures.
+              </li>
+            </ul>
+            <p class="footnote">
+              Optionally, the existing <code>dl/gateway/v1</code> service can be reused
+              as an API gateway, but this is not required: Celipa can also be fronted
+              by a dedicated gateway that simply routes to the IAM, messaging and the
+              new Celipa-specific target services.
+            </p>
+          </article>
+        </section>
+
+        <section id="screens">
+          <h2>Screens → Microservices mapping</h2>
+          <p>
+            Each table below lists a Celipa screen, its purpose, the key HTTP
+            calls it makes today, and how those map to microservices in the target
+            architecture.
+          </p>
+
+          <h3>1. Authentication & onboarding</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Auth &amp; Onboarding Screens</div>
+              <span class="badge">Auth + Notification Services</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Current server endpoints</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SplashScreen</strong></td>
+                  <td>
+                    Initial loading; decides whether to send user into auth flow
+                    or <code>HomeStack</code> based on token in
+                    <code>AsyncStorage</code>.
+                  </td>
+                  <td>
+                    No direct HTTP; reads <code>celipa_token</code> and then
+                    subsequent screens call auth endpoints.
+                  </td>
+                  <td>
+                    <span class="chip service">Auth Service</span>
+                    <span class="chip service">User Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SigninScreen</strong></td>
+                  <td>Email/password login into Celipa.</td>
+                  <td><code>POST /user/login</code></td>
+                  <td>
+                    <span class="chip service">Auth Service</span>
+                    (e.g. <code>POST /auth/login</code>)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SignupScreen</strong></td>
+                  <td>Account creation (email/password, names).</td>
+                  <td><code>POST /user/signup</code></td>
+                  <td>
+                    <span class="chip service">Auth Service</span>
+                    (<code>POST /auth/register</code>)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>CellPhoneNumber</strong></td>
+                  <td>Collects phone number for verification.</td>
+                  <td><code>POST /user/phoneNumber/confirm</code></td>
+                  <td>
+                    <span class="chip service">Auth Service</span>
+                    <span class="chip service">Notification Service</span>
+                    (Twilio SMS)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>VerifyCode</strong></td>
+                  <td>Enter verification / reset code.</td>
+                  <td><code>POST /user/confirm</code></td>
+                  <td>
+                    <span class="chip service">Auth Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SignUpUpdate</strong></td>
+                  <td>Completes profile details after phone/email verification.</td>
+                  <td>
+                    Primarily uses <code>PATCH /user/profile</code> via
+                    <code>updateUser</code>.
+                  </td>
+                  <td>
+                    <span class="chip service">User Service</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <h3>2. Home & statistics</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Home &amp; Dashboard</div>
+              <span class="badge">User + Receipt + Analytics</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Current server endpoints</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>HomeScreen</strong></td>
+                  <td>
+                    Main landing page: shows profile summary, total spent, total
+                    receipts, and the three most recent receipts. Also registers
+                    device push tokens and sends location updates.
+                  </td>
+                  <td>
+                    <code>GET /user/receipt/:userId</code>
+                    (via <code>getAllReceipts</code>)<br />
+                    <code>GET /user/receipts/totals/:userId</code><br />
+                    <code>PATCH /user/profile</code> (update FCM token, location)
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Service</span>
+                    <span class="chip service">Analytics Service</span>
+                    <span class="chip service">User Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>PreviousReceiptScreen</strong></td>
+                  <td>Full list of historical receipts with search by name.</td>
+                  <td><code>GET /user/receipt/:userId</code></td>
+                  <td>
+                    <span class="chip service">Receipt Service</span>
+                    (<code>GET /receipts/user/:userId</code>)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SelectedReceiptScreen</strong></td>
+                  <td>Details of a single previous receipt; can open VirtualReceipt.</td>
+                  <td>
+                    Uses data already loaded by <code>getAllReceipts</code>;
+                    when \"View receipt\" is tapped, navigates with
+                    <code>receiptId</code> into <code>VirtualReceiptScreen</code>.
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Service</span>
+                    <span class="chip service">Receipt Items Service</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <h3>3. Receipt creation & OCR</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Scanning &amp; Creating Receipts</div>
+              <span class="badge">OCR + Receipt + Items</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Current server / external calls</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ReceiptPictureScreen</strong></td>
+                  <td>
+                    Uses the camera or gallery to capture a receipt image, uploads
+                    it to Veryfi, and navigates to <code>UserReceiptScreen</code>
+                    with the parsed line items.
+                  </td>
+                  <td>
+                    <code>GET /global/credentials</code> (Veryfi creds)<br />
+                    <code>POST (Veryfi) /partner/documents/</code> via
+                    <code>UploadImage</code>
+                  </td>
+                  <td>
+                    <span class="chip service">OCR Service</span>
+                    (<code>GET /ocr/credentials</code>, <code>POST /ocr/scan</code>)<br />
+                    <span class="chip service">File Storage Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>UserReceiptScreen</strong></td>
+                  <td>
+                    Shows extracted items (line_items), subtotal, tax, and vendor
+                    details; allows editing, adding/removing items, and then
+                    creates a Celipa receipt in the backend.
+                  </td>
+                  <td>
+                    <code>POST /receipt/create</code><br />
+                    (optionally via <code>createReceiptV2</code> with image
+                    upload)
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Service</span>
+                    (<code>POST /receipts</code>)<br />
+                    <span class="chip service">Receipt Items Service</span><br />
+                    <span class="chip service">File Storage Service</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <h3>4. Collaborative splitting (Virtual Receipt)</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Virtual Receipt &amp; Collaboration</div>
+              <span class="badge">Items + Participants + Realtime</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Key current endpoints / events</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>VirtualReceiptScreen</strong></td>
+                  <td>
+                    Core collaboration surface: shows participants, items,
+                    assignment state, tip and tax; lets the leader edit the
+                    receipt, invite participants, and drive the payment flow.
+                  </td>
+                  <td>
+                    HTTP:<br />
+                    <code>GET /user/menuitems/:receiptId</code><br />
+                    <code>GET /current/user/:receiptId</code><br />
+                    <code>GET /receipt/participants/items/:receiptId</code><br />
+                    <code>POST /receipt/update/items/tip/:receiptId</code><br />
+                    <code>PUT /menu/addparticipant/:userId/:menuId/:receiptId/:quantity</code><br />
+                    <code>POST /receipt/participants/localparticipants/:receiptId</code><br />
+                    <code>DELETE /receipt/item/:itemId/:receiptId</code><br />
+                    <code>PUT /receipt/status/:userId/:receiptId</code><br />
+                    <code>PUT /receipt/confirmStatus/:userId/:receiptId</code><br />
+                    <code>POST /receipt/venmo/payments/:receiptId</code><br />
+                    <br />
+                    Real-time:<br />
+                    <code>socket.on(receiptId, ...)</code><br />
+                    (receipt menu, participants, tip/tax changes)<br />
+                    <code>socket.on(`${receiptId}pu`, ...)</code><br />
+                    (payment updates)
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Service</span><br />
+                    <span class="chip service">Receipt Items Service</span><br />
+                    <span class="chip service">Receipt Participants Service</span><br />
+                    <span class="chip service">Calculation Service</span><br />
+                    <span class="chip service">Notification Service</span> (email/SMS, Venmo texts)<br />
+                    <span class="chip service">Real-time Service</span>
+                    <span class="chip event">receipt.updated</span>
+                    <span class="chip event">item.assigned</span>
+                    <span class="chip event">participant.added</span>
+                    <span class="chip event">tip.updated</span>
+                    <span class="chip event">payment.confirmed</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>JoinReceiptScreen</strong></td>
+                  <td>
+                    Allows a user to join a receipt via a 5-digit code or QR
+                    code; on success navigates directly into
+                    <code>VirtualReceiptScreen</code>.
+                  </td>
+                  <td>
+                    <code>GET /receipt/join/:userId/:receiptCode</code><br />
+                    <code>GET /receipt/participants/items/:receiptId</code>
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Service</span>
+                    (<code>GET /receipts/join/:code</code>)<br />
+                    <span class="chip service">Receipt Participants Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>SingleUserReceiptModal</strong></td>
+                  <td>Shows a participant's individual share on a receipt.</td>
+                  <td>
+                    Driven by data already loaded from
+                    <code>GET /receipt/participants/items/:receiptId</code> plus
+                    local calculations.
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Items Service</span>
+                    <span class="chip service">Calculation Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>InviteParticipantsModal</strong></td>
+                  <td>
+                    Shows the invite QR / join code, and sends SMS/email
+                    invitations to potential participants.
+                  </td>
+                  <td>
+                    <code>POST /receipt/participants/localparticipants/:receiptId</code><br />
+                    Twilio SMS + SendGrid emails triggered server-side.
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Participants Service</span><br />
+                    <span class="chip service">Notification Service</span>
+                    (Twilio, SendGrid)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <h3>5. Payment tracking & completion</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Payment &amp; Completion</div>
+              <span class="badge">Participants + Notification</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Current endpoints</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>PaymentUpdatesScreen</strong></td>
+                  <td>
+                    For receipt creators: tracks who has paid via Venmo, shows
+                    \"Total owed\" and \"Total remaining\" across participants.
+                  </td>
+                  <td>
+                    <code>GET /receipt/participants/items/:receiptId</code><br />
+                    <code>GET /current/user/:receiptId</code><br />
+                    <code>PUT /receipt/status/:userId/:receiptId</code><br />
+                    Real-time: <code>socket.on(`${receiptId}pu`)</code>
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Participants Service</span><br />
+                    <span class="chip service">Receipt Items Service</span><br />
+                    <span class="chip service">Real-time Service</span><br />
+                    <span class="chip service">Analytics Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>AcceptPaymentModal</strong></td>
+                  <td>
+                    Lets a participant review their total and proceed to payment
+                    (Venmo, Cash App, PayPal, etc.).
+                  </td>
+                  <td>
+                    <code>GET /user/items/participants/:userId/:receiptId</code><br />
+                    <code>PUT /receipt/confirmStatus/:userId/:receiptId</code>
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Participants Service</span><br />
+                    <span class="chip service">Calculation Service</span><br />
+                    <span class="chip service">Notification Service</span>
+                    (email receipts)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>ConfirmationScreen</strong></td>
+                  <td>
+                    Participant confirmation screen after they complete their
+                    payment and confirm.
+                  </td>
+                  <td>
+                    Driven by <code>updateConfirmPaymentStatus</code> result and
+                    navigation params (no extra calls).
+                  </td>
+                  <td>
+                    <span class="chip service">Receipt Participants Service</span>
+                    <span class="chip service">Analytics Service</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <h3>6. Profile & preferences</h3>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Profile &amp; Payments</div>
+              <span class="badge">User + File Storage</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-narrow">Screen</th>
+                  <th>Description</th>
+                  <th>Current endpoints</th>
+                  <th>Target microservices</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ProfileScreen</strong></td>
+                  <td>
+                    Shows user's name, email, phone, profile picture, and entry
+                    points to edit profile, contact support, privacy policy, and
+                    preferred payment methods.
+                  </td>
+                  <td>
+                    <code>DELETE /users/markUnknown/:userId</code> (\"Delete
+                    profile\")<br />
+                    <code>PATCH /user/profile</code> (updates happen in
+                    EditProfileScreen via <code>updateUser</code>)
+                  </td>
+                  <td>
+                    <span class="chip service">User Service</span><br />
+                    <span class="chip service">File Storage Service</span>
+                    (profile pictures)
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>EditProfileScreen</strong></td>
+                  <td>Allows editing of user details and profile picture.</td>
+                  <td>
+                    <code>PATCH /user/profile</code><br />
+                    plus multipart upload via
+                    <code>updateUserFile</code> (profile image)
+                  </td>
+                  <td>
+                    <span class="chip service">User Service</span><br />
+                    <span class="chip service">File Storage Service</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>PrefferedPaymentScreen</strong></td>
+                  <td>
+                    Lets the user activate/deactivate methods like Venmo, Cash
+                    App, PayPal, Zelle, Apple Pay, and Cash, plus set a Cash App
+                    cashtag.
+                  </td>
+                  <td><code>PUT /user/payment/preferred</code></td>
+                  <td>
+                    <span class="chip service">User Service</span>
+                    (<code>PUT /users/:id/payment</code>)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+
+        <section id="flows">
+          <h2>End-to-end flows (monolith → microservices)</h2>
+          <div class="layout-grid">
+            <article class="card">
+              <div class="card-header">
+                <div class="card-title">Receipt creation flow</div>
+                <span class="card-pill">Scan → OCR → Create</span>
+              </div>
+              <pre><code>HomeScreen
+  └─ tap "Scan receipt"
+       ▼
+ReceiptPictureScreen
+  ├─ GET  /global/credentials             → OCR creds
+  ├─ POST Veryfi /partner/documents/      → OCR extraction
+  └─ navigate(UserReceiptScreen, data)
+       ▼
+UserReceiptScreen
+  └─ POST /receipt/create                 → create receipt + items + participants
+       ▼
+VirtualReceiptScreen
+  ├─ GET  /user/menuitems/:receiptId
+  ├─ GET  /current/user/:receiptId
+  ├─ WS   Socket.io on &lt;receiptId&gt;
+  └─ collaborative splitting begins</code></pre>
+              <p class="footnote">
+                In the microservices world, these map to OCR, Receipt, Items,
+                Participants, and Real-time services, but the app flow stays
+                identical.
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <div class="card-title">Join &amp; pay flow</div>
+                <span class="card-pill">Join → Select → Pay</span>
+              </div>
+              <pre><code>HomeScreen
+  └─ tap "Join receipt"
+       ▼
+JoinReceiptScreen
+  ├─ GET /receipt/join/:userId/:code
+  └─ navigate(VirtualReceiptScreen, { receiptId })
+       ▼
+VirtualReceiptScreen
+  ├─ assign items (PUT /menu/addparticipant/...)
+  └─ tap "Confirm selection"
+       ▼
+AcceptPaymentModal
+  └─ PUT /receipt/confirmStatus/:userId/:receiptId
+       ▼
+ConfirmationScreen
+  └─ done</code></pre>
+              <p class="footnote">
+                With microservices, the same flow uses Receipt, Participants,
+                Calculation, Notification, and Real-time services instead of a
+                single Express app.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="realtime">
+          <h2>Real-time & events</h2>
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Socket.io channels</div>
+              <span class="badge">Real-time Service</span>
+            </div>
+            <p>
+              Celipa already uses Socket.io heavily in
+              <code>VirtualReceiptScreen</code> and
+              <code>PaymentUpdatesScreen</code>. The microservices migration keeps
+              the same client code, but points the connection at a dedicated
+              Real-time service rather than the monolith.
+            </p>
+            <pre><code>// Current
+const SocketEndpoint = SERVER_URL + "/";
+const socket = io(SocketEndpoint, { transports: ["websocket"] });
+
+socket.on(receiptId, info =&gt; {
+  // receipt, menu, participants, tip/tax
+});
+
+socket.on(`${receiptId}pu`, info =&gt; {
+  // payment updates
+});</code></pre>
+            <pre><code>// Target
+const REALTIME_URL = "wss://realtime.celipa.co";
+const socket = io(REALTIME_URL, { transports: ["websocket"] });
+
+// Event payloads emitted by Real-time Service in response
+// to domain events on the message bus:
+//
+// - receipt.updated
+// - item.assigned
+// - participant.added
+// - tip.updated
+// - payment.confirmed</code></pre>
+            <p class="footnote">
+              This mirrors the target services pattern where each domain emits events
+              into a shared bus and presentation/frontends subscribe via a gateway and
+              real-time layer.
+            </p>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
+
