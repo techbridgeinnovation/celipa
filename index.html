@@ -1209,6 +1209,227 @@ Total per person: $5.00</code></pre>
               </div>
             </div>
           </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">The Experience Orchestrator Vision</div>
+              <span class="badge">Strategic Direction</span>
+            </div>
+            <p>
+              The vision for Celipa 2.0 as an <strong>"Experience Orchestrator"</strong> aligns perfectly 
+              with the 2026 market shift toward agentic AI, where digital assistants move from providing 
+              lists to executing multi-step actions on behalf of the group. By integrating trip planning 
+              and privacy-first media management, Celipa 2.0 fills the "Experience Gap" where groups 
+              currently have to juggle fragmented tools for discovery, voting, budgeting, and photo sharing.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">1. The Intelligent Trip Planner: "Goal-Oriented Orchestration"</div>
+              <span class="badge">Multi-Agent System</span>
+            </div>
+            <p>
+              Instead of a standard search engine, Celipa 2.0 utilizes a <strong>Multi-Agent System</strong> 
+              to handle the "herding cats" problem of group travel.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>The Scout Agent</h4>
+                <p>
+                  Uses Marketplace APIs (e.g., Viator, GetYourGuide, Bridgify) to pull real-time inventory 
+                  for tours and activities. It semantically parses menus and activity descriptions to ensure 
+                  they fit group dietary and physical constraints.
+                </p>
+              </div>
+              <div>
+                <h4>The Bargainer Agent</h4>
+                <p>
+                  Inspired by systems like DesiYatra, this agent autonomously contacts local vendors or hits 
+                  discount APIs to negotiate "Volume/Group Discounts" (e.g., 10% off for parties of 8+).
+                </p>
+              </div>
+            </div>
+            <h4>Simulated Group Liability</h4>
+            <p>
+              Before any booking, the agent calculates a "Preparation to Pay" range for each individual 
+              using the proportional formula:
+            </p>
+            <pre><code>Expected Share = (Base Activity Cost × (1 - Negotiated Discount)) + Est. Add-ons</code></pre>
+            <p>
+              This eliminates the "Unscrupulous Diner's Dilemma" (overspending by 37%) by setting clear 
+              expectations early.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">2. New Group-Based Activity Focus Areas</div>
+              <span class="badge">Market Research 2026</span>
+            </div>
+            <p>
+              Research into 2026 travel trends reveals high-growth sectors where a group-centric app can 
+              establish a competitive moat:
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Social Wellness & Shared Rituals</h4>
+                <p>
+                  There is a surge in "Social Wellness"—groups swapping nightlife for shared rituals like 
+                  group saunas, sunrise runs, and meditation retreats. Celipa can integrate booking for 
+                  wellness centers that offer group-sized facilities.
+                </p>
+              </div>
+              <div>
+                <h4>"Pop Culting" & Fandom Trips</h4>
+                <p>
+                  Big cultural moments are driving travel (e.g., Taylor Swift tours or filming location tours). 
+                  Celipa could focus on Event-Linked Itineraries, where the agent monitors ticket releases 
+                  (World Cup 2026, Coachella) and automatically proposes hotel-flight-transport bundles for 
+                  the group.
+                </p>
+              </div>
+              <div>
+                <h4>"Hyper Playgrounds" (Immersive Entertainment)</h4>
+                <p>
+                  43% of travelers are drawn to "high-concept" experiences like escape rooms, immersive 4D 
+                  dining, and VR arenas. Celipa can partner with ticketing APIs that handle complex capacity 
+                  controls and time-slot management for these venues.
+                </p>
+              </div>
+              <div>
+                <h4>Group Transport Logistics</h4>
+                <p>
+                  Groups frequently struggle with "who paid for the Uber?" Celipa's agent can monitor rideshare 
+                  APIs and automatically split the cost of multiple 4-person cars or 12-person shuttles required 
+                  to move the whole group.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">3. The Collaborative File Vault: Privacy-Centric Vision</div>
+              <span class="badge">Privacy-First Architecture</span>
+            </div>
+            <p>
+              Current group photo sharing is often a "dump" of images where privacy is ignored. Celipa 2.0 
+              can differentiate using <strong>Selective Privacy AI</strong>.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Selfie-Based Discovery</h4>
+                <p>
+                  Similar to TurtlePic or Kamero, guests upload a "registration selfie." The Vision Media 
+                  Service then scans the trip gallery and automatically generates a personalized feed for 
+                  each person.
+                </p>
+              </div>
+              <div>
+                <h4>Privacy-First Permissions</h4>
+                <ul>
+                  <li><strong>"In-the-Picture" Access:</strong> By default, users only see photos they are physically in.</li>
+                  <li><strong>Anonymous Face Scanning:</strong> To comply with 2026 privacy laws, the AI can perform "Anonymous Face Matching" where facial data is never linked to legal identities, only to a "Trip Token".</li>
+                  <li><strong>Automatic Meta-Tagging:</strong> The vault can utilize vision models to tag photos by location, activity (e.g., "Dining," "Hiking"), and sentiment to create an automated Group Trip Journal.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">4. Expansion of the Microservices Mesh</div>
+              <span class="badge">Architecture</span>
+            </div>
+            <p>
+              To support these features, the architecture must include four additional services:
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>New Microservice</th>
+                  <th>Functional Responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Experience Discovery Service</strong></td>
+                  <td>
+                    Interfaces with activity aggregators (Viator/SevenRooms) to rank activities based on 
+                    group budget and interest.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Consensus & Voting Service</strong></td>
+                  <td>
+                    Manages "Trip Polls" where members vote on activities. The agent uses results to finalize 
+                    the itinerary.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Vision Media Service</strong></td>
+                  <td>
+                    Handles facial recognition, automatic photo sorting, and privacy-managed distribution.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Negotiation Agent Service</strong></td>
+                  <td>
+                    An autonomous voice/text agent that negotiates group rates with vendors who don't have 
+                    public APIs.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">5. Implementation Workflow: The "Total Experience" Journey</div>
+              <span class="badge">User Flow</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>Planning</h4>
+                <p>
+                  A leader tells the agent, <strong>"8 of us, London, July, max $100/day for fun."</strong>
+                </p>
+              </div>
+              <div>
+                <h4>Orchestration</h4>
+                <p>
+                  The agent finds a "Group Pub Crawl" deal, suggests a "Harry Potter" tour (Pop Culting), 
+                  and reserves a table for 8 at a restaurant that fits the budget.
+                </p>
+              </div>
+              <div>
+                <h4>Voting</h4>
+                <p>
+                  The group uses the FlowTrip style interface to "Upvote" or "Downvote" activities in the app.
+                </p>
+              </div>
+              <div>
+                <h4>Live Trip</h4>
+                <p>
+                  As receipts are taken and photos uploaded, the Vision Media Service and AI Agent Service 
+                  reconcile costs and deliver private photo folders simultaneously.
+                </p>
+              </div>
+              <div>
+                <h4>Settlement</h4>
+                <p>
+                  One tap at the end of the trip settles all activities, dinners, and transport across all 
+                  150+ supported currencies.
+                </p>
+              </div>
+            </div>
+            <p class="footnote">
+              By focusing on the entire experience loop—from preventing overspending during discovery to 
+              protecting privacy during photo sharing—Celipa 2.0 moves beyond being a utility to becoming 
+              the default operating layer for group socializing.
+            </p>
+          </article>
         </section>
 
         <section id="screens">
