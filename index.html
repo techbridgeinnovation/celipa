@@ -1430,6 +1430,238 @@ Total per person: $5.00</code></pre>
               the default operating layer for group socializing.
             </p>
           </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Dining Intelligence: From Reactive to Proactive</div>
+              <span class="badge">Competitive Advantage</span>
+            </div>
+            <p>
+              The integration of agentic restaurant recommendations and group discount discovery marks the 
+              transition of Celipa 2.0 from a reactive splitting tool to a <strong>proactive social-financial 
+              consultant</strong>. By 2026, AI agents are expected to mediate the entire "discovery-to-checkout" 
+              journey, making this feature a critical competitive advantage.
+            </p>
+            <p>
+              For Celipa 2.0, this would be implemented as a specialized <strong>"Dining Intelligence"</strong> 
+              layer that combines real-time internet scraping with LLM-powered menu analysis.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">1. New Screens: The "Dining Discovery" Interface</div>
+              <span class="badge">UI/UX Design</span>
+            </div>
+            <p>
+              The UI must expand to include a planning phase before the receipt is even generated.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Dining Search & Discovery (The "Where to Eat" Hub)</h4>
+                <p>
+                  A conversational or filter-based interface where the group leader inputs cuisine, group size, 
+                  and proximity.
+                </p>
+              </div>
+              <div>
+                <h4>Budget Architect Dashboard</h4>
+                <p>
+                  Includes a "Per-Person Budget Slider." As the user moves the slider, the AI agent dynamically 
+                  updates a list of restaurants where the average predicted total (including regional tax and 20% 
+                  tip) fits the limit.
+                </p>
+              </div>
+              <div>
+                <h4>Live Group Deal Feed</h4>
+                <p>
+                  A dedicated tab showing "Active Group Promos" (e.g., "15% off parties of 6+" or "Free appetizer 
+                  for Celipa users") discovered by the scraping agent.
+                </p>
+              </div>
+              <div>
+                <h4>Recommendation Deep-Dive</h4>
+                <p>
+                  A screen showing why a restaurant was chosen, including extracted "Average Main Dish Price" 
+                  and "Crowd Sentiment" for large groups.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">2. Functional Strategy: How the Agent "Scans" and "Recommends"</div>
+              <span class="badge">Agent Architecture</span>
+            </div>
+            <p>
+              The agent functions as an autonomous orchestrator that breaks the goal ("Find Tacos for 8 under 
+              $30/person") into logical steps.
+            </p>
+            <div class="layout-grid">
+              <div>
+                <h4>Menu Intelligence</h4>
+                <p>
+                  The agent uses Vision-LLMs to transcribe current digital menus or PDF price lists. It doesn't 
+                  just look for keywords; it performs a semantic layout reconstruction to identify price-item 
+                  relationships and calculate a weighted average cost.
+                </p>
+              </div>
+              <div>
+                <h4>Autonomous Deal Discovery</h4>
+                <p>
+                  A background process hits "Restaurant Deal Scraping APIs" to extract time-bound promo codes 
+                  and hidden group policies from restaurant aggregator sites (e.g., DoorDash, Resy).
+                </p>
+              </div>
+              <div>
+                <h4>Simulated Split Preview</h4>
+                <p>
+                  Before booking, the agent provides a "Simulated Split" based on the formula:
+                </p>
+                <pre><code>Expected Individual Total = Avg. Dish Price × (1 + Regional Tax + 20% Tip)</code></pre>
+                <p>
+                  This gives the group a realistic expectation of their final liability.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">3. Expanded Microservices Architecture</div>
+              <span class="badge">Service Mesh</span>
+            </div>
+            <p>
+              To support this intelligence, three new specialized microservices are required within the existing mesh.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>New Microservice</th>
+                  <th>Functional Responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dining Discovery Service</strong></td>
+                  <td>
+                    Core recommendation engine; manages the logic for ranking restaurants based on budget, 
+                    cuisine, and past group history.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Scraper/Aggregator Adapter</strong></td>
+                  <td>
+                    Interfaces with Google Places API, Yelp, and Deal Scraping APIs to pull real-time data on 
+                    location and current promos.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Menu Intelligence Service</strong></td>
+                  <td>
+                    A dedicated LLM-powered service that processes unstructured menu data (text/images) into 
+                    structured price catalogs with 95%+ accuracy.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Booking & Event Service</strong></td>
+                  <td>
+                    Manages the API hand-off to reservation platforms (Resy/SevenRooms) and handles "Banquet 
+                    Inquiries" for very large groups.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">4. Implementation Workflow: Discovery to Settlement</div>
+              <span class="badge">End-to-End Flow</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>Intent Capture</h4>
+                <p>
+                  The user asks, <strong>"Find a cozy Italian spot for 10 people tonight, max $45 each."</strong>
+                </p>
+              </div>
+              <div>
+                <h4>Multimodal Scraping</h4>
+                <p>
+                  The Dining Discovery Service queries location APIs, while the Menu Intelligence Service scrapes 
+                  the latest menu and uses an LLM to verify that $45 covers a main, a drink, and shared appetizers 
+                  after tax/tip.
+                </p>
+              </div>
+              <div>
+                <h4>Deal Matching</h4>
+                <p>
+                  The Scraper Service finds an unlisted "Monday Night Group Special" on the restaurant's social 
+                  media page.
+                </p>
+              </div>
+              <div>
+                <h4>Proposal</h4>
+                <p>
+                  The user receives three ranked options with a "Celipa Budget Confidence" score.
+                </p>
+              </div>
+              <div>
+                <h4>Pre-Split Agreement</h4>
+                <p>
+                  The group accepts the recommendation, and Celipa sets up a "Pending Virtual Receipt" where the 
+                  $45 limit is pre-allocated to each member's budget.
+                </p>
+              </div>
+              <div>
+                <h4>Seamless Transition</h4>
+                <p>
+                  Once at the restaurant, the leader snaps the physical receipt, and the Vision-LLM Service reconciles 
+                  the actual prices against the initial AI prediction.
+                </p>
+              </div>
+            </div>
+            <p class="footnote">
+              By positioning Celipa 2.0 as the tool that <strong>prevents overspending</strong> rather than just 
+              tracking it, you address the "overspending effect" where diners typically spend 37% more when splitting 
+              equally. Moving from "What did I spend?" to "What should I spend?" based on real-time internet intelligence.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <div class="card-title">Summary of Plan Updates</div>
+              <span class="badge">Feature Summary</span>
+            </div>
+            <div class="layout-grid">
+              <div>
+                <h4>Added Screens</h4>
+                <ul>
+                  <li>Dining Discovery Hub</li>
+                  <li>Budget Matcher</li>
+                  <li>Group Offer Wallet</li>
+                </ul>
+              </div>
+              <div>
+                <h4>New Services</h4>
+                <ul>
+                  <li>Dining Discovery Service</li>
+                  <li>Menu Intelligence (LLM) Service</li>
+                  <li>Scraper/Aggregator Adapter</li>
+                  <li>Booking & Event Service</li>
+                </ul>
+              </div>
+              <div>
+                <h4>Competitive Moat</h4>
+                <p>
+                  Moving from <strong>"What did I spend?"</strong> to <strong>"What should I spend?"</strong> 
+                  based on real-time internet intelligence.
+                </p>
+              </div>
+            </div>
+          </article>
         </section>
 
         <section id="screens">
